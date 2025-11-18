@@ -6,24 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->integer('price');
-        $table->text('description')->nullable();
-        $table->string('image')->nullable();
-        $table->timestamps();
+            $table->id();
+            // $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Jika Anda punya tabel users
+            $table->decimal('total_amount', 10, 2); // Total harga pesanan
+            $table->string('status')->default('pending'); // pending, preparing, ready, completed, cancelled
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('orders');

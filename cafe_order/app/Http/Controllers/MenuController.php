@@ -9,23 +9,36 @@ class MenuController extends Controller
 {
     public function index()
     {
-        return Menu::all();
+        return response()->json(Menu::all()); // PENTING: Harus ada response()->json()
     }
 
     public function store(Request $request)
     {
-        return Menu::create($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric', // Validasi price sebagai numeric
+            'image_url' => 'nullable|url',
+        ]);
+        $menu = Menu::create($request->all());
+        return response()->json($menu, 201); // 201 Created
     }
 
     public function show(Menu $menu)
     {
-        return $menu;
+        return response()->json($menu); // PENTING: Harus ada response()->json()
     }
 
     public function update(Request $request, Menu $menu)
     {
+        $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'sometimes|numeric',
+            'image_url' => 'nullable|url',
+        ]);
         $menu->update($request->all());
-        return $menu;
+        return response()->json($menu); // PENTING: Harus ada response()->json()
     }
 
     public function destroy(Menu $menu)

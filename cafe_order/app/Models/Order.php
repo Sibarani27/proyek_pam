@@ -2,13 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-     protected $fillable = [
-        'nama',
-        'harga',
-        'kategori'
+    use HasFactory;
+
+    protected $fillable = [
+        // 'user_id', // Uncomment jika Anda punya tabel user dan foreign key
+        'total_amount',
+        'status',
     ];
+
+    // Definisikan relasi ke OrderItem
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

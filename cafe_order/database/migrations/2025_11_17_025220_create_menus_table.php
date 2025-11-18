@@ -6,24 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('menus', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->integer('price');
-        $table->text('description')->nullable();
-        $table->string('image')->nullable();
-        $table->timestamps();
+            $table->id();
+            $table->string('name'); // Nama menu
+            $table->text('description')->nullable(); // Deskripsi, bisa kosong
+            $table->decimal('price', 8, 2); // Harga (misal: 999999.99) - PENTING: ini harus decimal!
+            $table->string('image_url')->nullable(); // URL gambar menu
+            // $table->string('category')->nullable(); // Jika Anda ingin kolom kategori
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('menus');
