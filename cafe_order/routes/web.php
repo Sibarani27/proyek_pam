@@ -1,36 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Auth\AuthRegisterController;
+use App\Http\Controllers\Auth\AuthLoginController;
+use App\Http\Controllers\Auth\AuthLogoutController;
+use App\Http\Middleware\ApiTokenMiddleware;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// -------- RUTE API UNTUK FLUTTER --------
-Route::prefix('api')->group(function () {
-    // Rute untuk Menu
-    Route::get('/menu', [MenuController::class, 'index']); // Mengambil daftar menu
-    // Route::get('/menu/{id}', [MenuController::class, 'show']); // Untuk detail menu jika perlu
+Route::post('/register', [AuthRegisterController::class, 'register']);
+Route::post('/login', [AuthLoginController::class, 'login']);
 
-    // Rute untuk Order
-    // POST untuk membuat order baru (singular '/order' seperti yang Anda inginkan)
-    Route::post('/order', [OrderController::class, 'store']);
+Route::middleware(ApiTokenMiddleware::class)->group(function () {
+    Route::post('/logout', [AuthLogoutController::class, 'logout']);
 
-    // Rute untuk melihat semua order (disarankan plural '/orders' untuk koleksi)
-    Route::get('/orders', [OrderController::class, 'index']); // GET untuk melihat semua order
-    // Rute untuk melihat detail satu order (singular '/order/{id}')
-    Route::get('/order/{id}', [OrderController::class, 'show']);
+    // Contoh: route yang butuh login
+    Route::get('/profile', function (\Illuminate\Http\Request $request) {
+        return $request->user();
+    });
 });
+
+
+
